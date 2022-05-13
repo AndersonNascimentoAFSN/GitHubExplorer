@@ -15,7 +15,7 @@ module.exports = {
         extensions: ['.js', '.jsx'],
     },
     devServer: {
-        static: path.resolve(__dirname, 'public'),
+        static: path.resolve(__dirname, 'public'), // recarrega a aplicação toda vez que há uma mudança
     },
     plugins: [ // Opção utilizada para não precisar importar o script js no index.html
         new HtmlWebpackPlugin({
