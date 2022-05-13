@@ -3,8 +3,16 @@ import RepositoryItem from "../RepositoryItem";
 import { GithubApi } from "../../../service/api";
 import "../../../styles/repositories.scss";
 
+interface Repository {
+  key: number,
+  id: number,
+  name: string,
+  description: string,
+  html_url: string
+}
+
 export default function RepositoryList() {
-  const [repositories, setRepositories] = useState([]);
+  const [repositories, setRepositories] = useState<Repository[]>([]);
 
   const fetchRepositories = useCallback(() => {
     GithubApi.getRepositoriesByUsername("andersonnascimentoafsn").then((data) =>

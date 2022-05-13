@@ -1,4 +1,3 @@
-import React from "react";
 import Repository from "./components/Repository";
 import "./styles/global.scss";
 

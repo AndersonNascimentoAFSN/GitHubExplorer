@@ -1,6 +1,12 @@
 import PropTypes from "prop-types";
+import { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
 
-export default function Button(props) {
+interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> { 
+  name: string,
+  handle: () => void,
+}
+
+export default function Button(props: ButtonProps) {
   return (
     <button
       type={props.type}
