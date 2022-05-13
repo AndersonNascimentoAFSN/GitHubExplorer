@@ -1,27 +1,30 @@
-import PropTypes from "prop-types";
+import { useState, useEffect, useCallback } from "react";
 import RepositoryItem from "../RepositoryItem";
+import { getRepositoriesByUsername } from "../../../service/api";
+import "../../../styles/repositories.scss";
 
-export default function RepositoryList(props) {
+export default function RepositoryList() {
+  const [repositories, setRepositories] = useState([]);
+
+  const fetchRepositories = useCallback(async () => {
+    const repositories = await getRepositoriesByUsername(
+      "andersonnascimentoafsn"
+    );
+    setRepositories(repositories);
+  }, []);
+
+  useEffect(() => {
+    fetchRepositories();
+  }, []);
+
   return (
     <section className="repository-list">
       <ul>
-        {props.repositories &&
-          props.repositories.map((repository) => (
+        {repositories &&
+          repositories.map((repository) => (
             <RepositoryItem key={repository.id} repository={repository} />
           ))}
       </ul>
     </section>
   );
 }
-
-RepositoryList.propTypes = {
-  props: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      description: PropTypes.string,
-      link: PropTypes.string,
-      linkName: PropTypes.string,
-    })
-  ),
-};
