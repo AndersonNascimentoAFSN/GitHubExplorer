@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -16,23 +17,33 @@ module.exports = {
     },
     devServer: {
         static: path.resolve(__dirname, 'public'), // recarrega a aplicação toda vez que há uma mudança
+        hot: true,
     },
-    plugins: [ // Opção utilizada para não precisar importar o script js no index.html
+    plugins: [ 
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, 'public', 'index.html')
-        })
-    ],
+            template: path.resolve(__dirname, 'public', 'index.html') // Opção utilizada para não precisar importar o script js no index.html
+        }),
+        isDevelopment && new ReactRefreshWebpackPlugin(), // plugin para não perde os states da aplicação ao ser recarregada a aplicação, após uma mudança.
+
+    ].filter(Boolean), // para adicionar lógica condicional aos plugins. Pois caso o resultado seja falso, esse false é filtrado, não causando erro na aplicação.
     module: {
         rules: [
             {
                 test: /\.jsx$/,
                 exclude: /node_modules/,
-                use: 'babel-loader',
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        plugins: [
+                            isDevelopment && require.resolve('react-refresh/babel')
+                        ].filter(Boolean),
+                    }
+                },
             },
             {
                 test: /\.scss$/,
                 exclude: /node_modules/,
-                use: ['style-loader', 'css-loader', 'sass-loader'], 
+                use: ['style-loader', 'css-loader', 'sass-loader'],
             }
         ],
     }
